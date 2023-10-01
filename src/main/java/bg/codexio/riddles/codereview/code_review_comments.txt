@@ -1,0 +1,104 @@
+
+// Class should have modifier.
+class Shop {
+    private static Shop instance;
+
+    // Its good practice 'private final List<Worker> workers;' to be declared here,
+    // and to be initialized in private constrictor as follows.
+
+    // For 'Singleton' patter is needed private constructor.
+    // private Shop() {
+    //     workers = new ArrayList<>();
+    // }
+
+    // This method can be 'synchronized' to create a thread-safe singleton class,
+    // depending on performance or needs. This is 'lazy initialization'.
+    public static Shop getInstance() {
+        if (instance == null) {
+            instance = new Shop();
+        }
+
+        return instance;
+    }
+
+    // Its good practice 'private final List<Worker> workers;' to be declared earlier in the class.
+    // Missing generic type: 'List<Worker> workers = new ArrayList<>();', in this case 'Worker' interface.
+    private List workers = new ArrayList();
+
+    // Its better approach to use more specific type 'Worker' interface, instead of 'Object' class.
+    public void addWorker(Object worker) {
+        this.workers.add(worker);
+    }
+
+    // Use more precise types than double for representing money. For ex. 'BigDecimal'.
+    public double getTurnover() {
+        // It is good to use a specific variable type - in this case: 'double' or 'BigDecimal'.
+        var turnOver = 0.0;
+        // Using more specific type - in this case: 'Worker' interface instead of 'var'.
+        for (var worker : this.workers) {
+            // Inconvertible types, cannot cast 'var' to 'SalesConsultant'.
+            if (worker instanceof SalesConsultant); {
+                turnOver += ((SalesConsultant) worker).getMoney();
+            }
+            // Use 'else-if' to avoid unnecessary checks.
+
+            // Inconvertible types, cannot cast 'var' to 'MarketingSpecialist'.
+            if (worker instanceof MarketingSpecialist) {
+                turnOver += ((MarketingSpecialist) worker).getBudget();
+            }
+        }
+
+        return turnOver;
+    }
+}
+
+// Class should have modifier.
+class SalesConsultant {
+
+    // Field could be 'final'.
+    private Shop workingShop;
+    // Use more precise types than double for representing money. For ex. 'BigDecimal'.
+    private double earnedMoney;
+
+    public SalesConsultant() {
+        this.workingShop = Shop.getInstance();
+        this.workingShop.addWorker(this);
+    }
+
+
+    public void sellProduct(double price) {
+    	// This approach ensure non-negativity.
+    	// So it will be used if method can expect a negative value of argument to be passed to parameter.
+        this.earnedMoney += Math.max(price, 0);
+    }
+
+    // Use more precise types than double for representing money. For ex. 'BigDecimal'.
+    public double getMoney() {
+        return this.earnedMoney;
+    }
+}
+
+// Class should have modifier.
+class MarketingSpecialist {
+
+    // Field could be 'final'.
+    private Shop workingShop;
+    // Use more precise types than double for representing money. For ex. 'BigDecimal'.
+    private double budget = 5000.00;
+
+    public MarketingSpecialist() {
+        this.workingShop = Shop.getInstance();
+        this.workingShop.addWorker(this);
+    }
+
+    public void spendMoney(double marketingCampaignCost) {
+	// This approach ensure non-negativity.
+    	// So it will be used if method can expect a negative value of argument to be passed to parameter.
+        this.budget -= Math.max(marketingCampaignCost, 0);
+    }
+
+    // Use more precise types than double for representing money. For ex. 'BigDecimal'.
+    public double getBudget() {
+        return this.budget;
+    }
+}
