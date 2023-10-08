@@ -33,6 +33,8 @@ public class Shop {
                 turnOver = turnOver.add(((SalesConsultant) worker).getMoney());
             } else if (worker instanceof MarketingSpecialist) {
                 turnOver = turnOver.add(((MarketingSpecialist) worker).getBudget());
+            } else {
+                System.out.printf("Unrecognized worker type for: %s\n", worker);
             }
         }
         return turnOver;
