@@ -22,22 +22,30 @@ public class ElfBusiness {
     }
 
     public static int calculateLettersToRemove(String word1, String word2) {
-        int[] frequency1 = new int[26];
-        int[] frequency2 = new int[26];
+        int[] frequency1 = getLettersFrequency(word1);
+        int[] frequency2 = getLettersFrequency(word2);
 
-        for (char c : word1.toLowerCase(Locale.ROOT).toCharArray()) {
-            frequency1[c - 'a']++;
+        return getLettersToRemove(frequency1, frequency2);
+    }
+
+    private static int[] getLettersFrequency(String word) {
+        int[] lettersFrequency = new int[26];
+
+        for (char c : word.toLowerCase(Locale.ROOT).toCharArray()) {
+            lettersFrequency[c - 'a']++;
         }
 
-        for (char c : word2.toLowerCase(Locale.ROOT).toCharArray()) {
-            frequency2[c - 'a']++;
-        }
+        return lettersFrequency;
+    }
 
+    private static int getLettersToRemove(int[] frequency1, int[] frequency2) {
         int lettersToRemove = 0;
+
         for (int i = 0; i < 26; i++) {
             lettersToRemove += Math.abs(frequency1[i] - frequency2[i]);
         }
 
         return lettersToRemove;
     }
+
 }
